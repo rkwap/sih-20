@@ -21,13 +21,14 @@ def search():
 @main.route("/reviews/<string:pid>", methods=['POST', 'GET'])
 def reviews(pid):
     url = 'http://0.0.0.0:4000'+url_for('flipkart.getReviews', pid=pid)
-    reviews = requests.get(url, verify=False).json()
-    print(reviews)
-    positive = reviews['positive']
-    negative = reviews['negative']
-    neutral = reviews['neutral']
-    slightly_positive = reviews['slightly_positive']
-    slightly_negative = reviews['slightly_negative']
-    reviews = reviews['results']
+    print(url)
+    # reviews = requests.get(url, verify=False).json()
+    # print(reviews)
+    # positive = reviews['positive']
+    # negative = reviews['negative']
+    # neutral = reviews['neutral']
+    # slightly_positive = reviews['slightly_positive']
+    # slightly_negative = reviews['slightly_negative']
+    # reviews = reviews['results']
 
     return render_template("reviews.html",**locals())

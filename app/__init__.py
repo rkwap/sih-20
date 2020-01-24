@@ -1,13 +1,29 @@
+from __future__ import print_function
+import csv
+import math
 import os
-from flask import Flask, request, render_template, flash, redirect, url_for, session, Blueprint
-from tempfile import mkdtemp
-import psycopg2
-from flask_session import Session
-from functools import wraps
+import sys
+import time
 import requests
 import json
+import psycopg2
+import argparse
+import lxml.html
+import io
+import nltk
+from datetime import date
+from flask_mail import Mail, Message
+from flask import Flask, request, render_template, flash, redirect, url_for, session, Blueprint,jsonify
+from tempfile import mkdtemp
+from flask_session import Session
+from functools import wraps
 from flask_sqlalchemy import SQLAlchemy
-from flask_graphql import GraphQLView
+from lxml.cssselect import CSSSelector
+from flask import (Blueprint, Flask, flash, g, redirect, render_template,
+                   request, send_file, session, url_for)
+from bs4 import BeautifulSoup
+
+from googletrans import Translator
 
 app = Flask(__name__, instance_path=os.path.join(os.path.abspath(os.curdir), 'instance'), instance_relative_config=True, static_url_path="", static_folder="static")
 app.config.from_pyfile('config.cfg')
@@ -18,25 +34,8 @@ con = psycopg2.connect(dbname=app.config['DBNAME'],user=app.config['DBUSER'],hos
 
 DB_URL = 'postgresql+psycopg2://{user}:{pw}@{url}/{db}'.format(user=app.config['DBUSER'],pw=app.config['PASSWORD'],url=app.config['URL'],db=app.config['DBNAME'])
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-
-from app.views.scraping import models
-from app.views.scraping.models import db_session
-from app.views.scraping.schema import schema, Products
-
-
-app.add_url_rule(
-    '/graphql',
-    view_func=GraphQLView.as_view(
-        'graphql',
-        schema=schema,
-        graphiql=True # for having the GraphiQL interface
-    )
-)
-
-@app.teardown_appcontext
-def shutdown_session(exception=None):
-    db_session.remove()
 
 def execute_db(query,args=()):
     cur = con.cursor()
@@ -49,27 +48,27 @@ def query_db(query,args=(),one=False):
     values=cur.fetchall()
     return values
 
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if session.get("adminid") is None:
-            return redirect(url_for("auth.login"))
-        return f(*args, **kwargs)
-    return decorated_function
+# def login_required(f):
+#     @wraps(f)
+#     def decorated_function(*args, **kwargs):
+#         if session.get("adminid") is None:
+#             return redirect(url_for("auth.login"))
+#         return f(*args, **kwargs)
+#     return decorated_function
 
-def admin_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if session.get("admin")==False:
-            return redirect(url_for("main.index", next=request.url))
-        return f(*args, **kwargs)
-    return decorated_function
+# def admin_required(f):
+#     @wraps(f)
+#     def decorated_function(*args, **kwargs):
+#         if session.get("admin")==False:
+#             return redirect(url_for("main.index", next=request.url))
+#         return f(*args, **kwargs)
+#     return decorated_function
     
 # Importing Blueprints
 from app.views.main import main
 from app.views.scraping.flipkart import flipkart
-from app.views.scraping.amazon import amazon
+from app.views.scraping.youtube import youtube
 # Registering Blueprints
 app.register_blueprint(main)
 app.register_blueprint(flipkart)
-app.register_blueprint(amazon)
+app.register_blueprint(youtube)

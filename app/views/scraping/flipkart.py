@@ -1,20 +1,18 @@
-from flask import Flask, request, flash, render_template, flash, redirect, url_for, session, Blueprint,jsonify
-from flask_session import Session
 from app import *
-import requests
-from bs4 import BeautifulSoup
-import json
-from textblob import TextBlob
-from .main import saveReviews
-
-flipkart = Blueprint('flipkart', __name__,url_prefix='/scrap/flipkart')
+# from .main import saveReviews
+flipkart = Blueprint('flipkart',__name__,url_prefix='/scrap/flipkart')
 
 
-@flipkart.route("reviews/<string:pid>", methods=['POST', 'GET'])
+@flipkart.route("/hello/", methods=['POST', 'GET'])
+def hello():
+    print("#########")
+    return 0
+
+
+@flipkart.route("/reviews/<string:pid>", methods=['POST', 'GET'])
 def getReviews(pid):
     data = []
-
-
+    
     products = query_db("SELECT * from products WHERE pid=%s", (pid,))
     reviews = query_db("SELECT pid from reviews WHERE pid=%s", (pid,))
 
@@ -65,41 +63,41 @@ def getReviews(pid):
     return jsonify(reviews)
 
 
-@flipkart.route("results/<string:q>", methods=['POST', 'GET'])
-def getResults(q):
-    results = True
-    p_name=[]
-    p_url=[]
-    p_id=[]
-    trust_value=[]
-    page = requests.get('https://www.flipkart.com/search?q='+q)
-    soup = BeautifulSoup(page.text, 'html.parser')
-    string = soup.find('script', {'id':'jsonLD'}).text
-    string = json.loads(string)
-    string = string['itemListElement']
-    query = ' '.join(q.split('+'))
-    polarities = []
-    for s in string:
-        p_name.append(s['name'])
-        p_url.append(s['url'])
-        pos1 = str(s['url']).find('?pid=')
-        pos2 = str(s['url']).find('&lid=')
-        id = str(s['url'])[pos1:pos2]
-        id = id.replace('?pid=','').replace('&lid=','')
-        p_id.append(id)
-        products_chk = query_db("SELECT pid from products WHERE pid=%s", (id,))
-        if not products_chk:
-            execute_db("INSERT INTO products(pid,name,url) VALUES (%s,%s,%s)",(id,s['name'],s['url'],))
-            saveReviews(id)
+# @flipkart.route("results/<string:q>", methods=['POST', 'GET'])
+# def getResults(q):
+#     results = True
+#     p_name=[]
+#     p_url=[]
+#     p_id=[]
+#     trust_value=[]
+#     page = requests.get('https://www.flipkart.com/search?q='+q)
+#     soup = BeautifulSoup(page.text, 'html.parser')
+#     string = soup.find('script', {'id':'jsonLD'}).text
+#     string = json.loads(string)
+#     string = string['itemListElement']
+#     query = ' '.join(q.split('+'))
+#     polarities = []
+#     for s in string:
+#         p_name.append(s['name'])
+#         p_url.append(s['url'])
+#         pos1 = str(s['url']).find('?pid=')
+#         pos2 = str(s['url']).find('&lid=')
+#         id = str(s['url'])[pos1:pos2]
+#         id = id.replace('?pid=','').replace('&lid=','')
+#         p_id.append(id)
+#         products_chk = query_db("SELECT pid from products WHERE pid=%s", (id,))
+#         if not products_chk:
+#             execute_db("INSERT INTO products(pid,name,url) VALUES (%s,%s,%s)",(id,s['name'],s['url'],))
+#             saveReviews(id)
 
-        polarity=query_db("SELECT polarity from reviews WHERE pid=%s", (id,))
-        polarity_ = []
-        for review in polarity:
-             for poles in review:
-                polarity_.append(round(poles, 4))
-        tv = query_db("SELECT AVG(polarity) FROM reviews WHERE pid=%s",(id,))
-        if tv[0][0] is not None:
-            trust_value.append(round(tv[0][0],2))
-        polarities.append(polarity_)
-    data = zip(p_name,p_id,p_url,trust_value)
-    return render_template('results.html',**locals())
+#         polarity=query_db("SELECT polarity from reviews WHERE pid=%s", (id,))
+#         polarity_ = []
+#         for review in polarity:
+#              for poles in review:
+#                 polarity_.append(round(poles, 4))
+#         tv = query_db("SELECT AVG(polarity) FROM reviews WHERE pid=%s",(id,))
+#         if tv[0][0] is not None:
+#             trust_value.append(round(tv[0][0],2))
+#         polarities.append(polarity_)
+#     data = zip(p_name,p_id,p_url,trust_value)
+#     return render_template('results.html',**locals())
