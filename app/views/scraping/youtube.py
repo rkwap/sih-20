@@ -2,24 +2,37 @@ from app import *
 youtube = Blueprint('youtube', __name__,url_prefix='/scrape/youtube')
 youtube_id=''
 
-
-@youtube.route('/<string:y_id>/', methods=["GET","POST"])
-def index(y_id):
-    translator = Translator()
-    youtube_id=y_id
+@youtube.route('/<string:yt_id>/', methods=["GET","POST"])
+def yt_search_url(yt_id):
+    youtube_id=yt_id
     limit=10
     count=0
     data=[]
     for comment in download_comments(youtube_id):
-        # data.append([comment['cid'],comment['text']])
-        text=str(comment['text'])
-        print(text)
+        c_id=str(comment['cid'])
+        check_comment=query_db("SELECT id from youtube WHERE c_id=%s", (c_id,))
+        if len(check_comment)==0:
+            # calculating sentiment and storing
+            text=str(comment['text'])
+            sentiment=getMixedSentiment(str(comment['text']))
+            polarity=str(sentiment.polarity)
+            subjectivity=str(sentiment.subjectivity)
+            execute_db("INSERT INTO youtube(id,c_id,text,polarity,subjectivity) VALUES (%s,%s,%s,%s,%s)",(
+                        yt_id,
+                        c_id,
+                        text,
+                        polarity,
+                        subjectivity,
+                    ))
+                    
+        # retrieving data from db
+        data=query_db("SELECT * FROM youtube WHERE c_id=%s", (c_id,))
+
         count+=1
+
         if limit and count>=limit:
             break
 
-
-    # print(data)
     return render_template("index.html", **locals())
 
 
@@ -47,7 +60,7 @@ def extract_reply_cids(html):
     sel = CSSSelector('.comment-replies-header > .load-comments')
     return [i.get('data-cid') for i in sel(tree)]
 
-def ajax_request(session, url, params, data, retries=10, sleep=20):
+def ajax_request(session, url, params, data, retries=500, sleep=0):
     for _ in range(retries):
         response = session.post(url, params=params, data=data)
         if response.status_code == 200:
@@ -56,7 +69,7 @@ def ajax_request(session, url, params, data, retries=10, sleep=20):
         else:
             time.sleep(sleep)
 
-def download_comments(youtube_id, sleep=1):
+def download_comments(youtube_id, sleep=0):
     session = requests.Session()
     session.headers['User-Agent'] = USER_AGENT
 
