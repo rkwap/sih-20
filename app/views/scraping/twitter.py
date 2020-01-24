@@ -3,16 +3,17 @@ from textblob import TextBlob
 from googletrans import Translator
 import psycopg2
 import json
+import emoji
 
 def scrape(search_string):
     tweets = []
     c = twint.Config()
     c.Search = search_string
-    c.Limit = 20
-    c.Filter_retweets = True
+    c.Limit = 100
+    #c.Filter_retweets = True
     c.Store_object = True
     c.Store_object_tweets_list = tweets
-    c.Format = "id: {id} | tweet: {tweet}"
+    c.Format = "id: {id}"
     twint.run.Search(c)
     return tweets
 
@@ -34,10 +35,11 @@ def write(search):
         tweets = scrape(search)
         for tweet in tweets:
             string = tweet.tweet
-            string = string.encode('ascii', 'ignore').decode('ascii')
+            string = emoji.get_emoji_regexp().sub(u'',string)
             val = Translate(string)
-            query = "insert into twitter values('"+str(tweet.id)+"','"+str(val[0])+"','"+str(val[1])+"','"+str(val[2])+"');"
-            cursor.execute(query)
+            #query = "insert into twitter values('"+str(tweet.id)+"','"+str(val[0])+"','"+str(val[1])+"','"+str(val[2])+"');"
+            query = "INSERT INTO twitter(t_id,tweet,polarity,subjectivity) VALUES (%s,%s,%s,%s)"
+            cursor.execute(query,(str(tweet.id),str(val[0]),str(val[1]),str(val[2])))
             conn.commit()
         cursor.close()
         conn.close()
