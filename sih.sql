@@ -21,7 +21,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: twitter; Type: TABLE; Schema: public; Owner: rkwap
+-- Name: twitter; Type: TABLE; Schema: public; Owner: badboy
 --
 
 CREATE TABLE public.twitter (
@@ -32,10 +32,10 @@ CREATE TABLE public.twitter (
 );
 
 
-ALTER TABLE public.twitter OWNER TO rkwap;
+ALTER TABLE public.twitter OWNER TO badboy;
 
 --
--- Name: youtube; Type: TABLE; Schema: public; Owner: rkwap
+-- Name: youtube; Type: TABLE; Schema: public; Owner: badboy
 --
 
 CREATE TABLE public.youtube (
@@ -47,22 +47,22 @@ CREATE TABLE public.youtube (
 );
 
 
-ALTER TABLE public.youtube OWNER TO rkwap;
+ALTER TABLE public.youtube OWNER TO badboy;
 
 --
--- Data for Name: twitter; Type: TABLE DATA; Schema: public; Owner: rkwap
---
-
-
-
---
--- Data for Name: youtube; Type: TABLE DATA; Schema: public; Owner: rkwap
+-- Data for Name: twitter; Type: TABLE DATA; Schema: public; Owner: badboy
 --
 
 
 
 --
--- Name: twitter twitter_pkey; Type: CONSTRAINT; Schema: public; Owner: rkwap
+-- Data for Name: youtube; Type: TABLE DATA; Schema: public; Owner: badboy
+--
+
+
+
+--
+-- Name: twitter twitter_pkey; Type: CONSTRAINT; Schema: public; Owner: badboy
 --
 
 ALTER TABLE ONLY public.twitter
@@ -70,7 +70,7 @@ ALTER TABLE ONLY public.twitter
 
 
 --
--- Name: youtube youtube_pkey; Type: CONSTRAINT; Schema: public; Owner: rkwap
+-- Name: youtube youtube_pkey; Type: CONSTRAINT; Schema: public; Owner: badboy
 --
 
 ALTER TABLE ONLY public.youtube
