@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+  <meta charset="utf-8" />
+  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>
+    SentiENT
+  </title>
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+  <!-- Extra details for Live View on GitHub Pages -->
+  <!-- Canonical SEO -->
+  <link rel="canonical" href="http://www.creative-tim.com/product/paper-dashboard-2-pro.html" />
+  <!--     Fonts and icons     -->
+  <link href="http://fonts.googleapis.com/css1a80.css?family=Montserrat:400,700,200" rel="stylesheet" />
+  <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+  <!-- CSS Files -->
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/assets/css/paper-dashboard.min790f.css?v=2.0.1" rel="stylesheet" />
+  <!-- CSS Just for demo purpose, don't include it in your project -->
+  <link href="/assets/demo/demo.css" rel="stylesheet" />
+</head>
+
+<body class="">
+  <!-- End Google Tag Manager (noscript) -->
+  <div class="wrapper ">
+    <div class="sidebar" data-color="brown" data-active-color="danger">
+      <!--
+        Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
+    -->
+      <div class="logo">
+        <a href="#" class="simple-text logo-normal text-center">
+          SentiEnt
+          <!-- <div class="logo-image-big">
+            <img src="../assets/img/logo-big.png">
+          </div> -->
+        </a>
+      </div>
+      <div class="sidebar-wrapper">
+        <ul class="nav">
+          <li {% if request.path == url_for('main.index') %}class="active"{% endif %}>
+            <a href="{{ url_for('main.index') }}">
+              <i class="nc-icon nc-bank"></i>
+              <h5>Dashboard</h5>
+            </a>
+          </li>
+          <li {% if request.path == url_for('main.search') %}class="active"{% endif %}>
+            <a href="{{ url_for('main.search') }}">
+              <i class="nc-icon nc-zoom-split"></i>
+              <h5>Search</h5>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="main-panel">
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+        <div class="container-fluid">
+          <div class="navbar-wrapper">
+            <div class="navbar-toggle">
+              <button type="button" class="navbar-toggler">
+                <span class="navbar-toggler-bar bar1"></span>
+                <span class="navbar-toggler-bar bar2"></span>
+                <span class="navbar-toggler-bar bar3"></span>
+              </button>
+            </div>
+            <a class="navbar-brand" href="#" style="font:30px">SentiENT- Analysing reviews of products and services to present the best statistics.</a>
+          </div>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+          </button>
+        </div>
+      </nav>
+      <!-- End Navbar -->
+      <!-- <div class="panel-header">
+
+  <canvas id="bigDashboardChart"></canvas>
+
+
+</div> -->
+      <div class="content">
+       <!--  {% block main %}
+       {% endblock %} -->
+       <div class="row">
+             <div class="col-md-8">
+            <div class="card" >
+              <div class="card-header ">
+                <h4 class="card-title">What is SentiENT</h4>
+                
+              </div>
+              <div class="card-body " >
+                <p class="text-dark" style="font-size:16px;">SentiEnt is a system that analyses large amount of reviews of a product on e-commerce sites gathers sentiment pertaining to the product and represents the trends in an intelligible and attractive form.</p>
+                
+              </div>
+
+              <div class="card-footer ">
+              </div>
+           </div>
+
+           <div class="card" >
+              <div class="card-header ">
+                <h4 class="card-title">Why does it matter ? </h4>
+                
+              </div>
+              <div class="card-body " >
+                <p class="text-dark" style="font-size:16px;">According to an online survey, 88% of consumers trust online reviews as much as personal recommendations. Nearly 9 in 10 consumers have read online reviews to determine the quality of a local business, and 39% do so on a regular basis.The survey shows how much more regularly people are reading reviews, clearly highlighting the need for local businesses to attract more reviews and actively manage their online reputation.<br><br>
+
+    So we can infer that in the present scenario, customer reviews can make or break e-commerce industry and it is essential for the stake-holders to monitor the sentiment trends for improvement of user experience.<br><br>
+
+    SentiKart provides a solution to e-commerce sites to easily monitor trends. Meanwhile, also giving an interface to prospective buyers to search a product in our database to see sentiments of thousands of reviews without going through them manually.</p>
+                
+              </div>
+
+              <div class="card-footer ">
+              </div>
+           </div>
+           </div>
+
+             <div class="col-md-4">
+            <div class="card ">
+              <div class="card-header ">
+                <h3 class="card-title">Statistics</h3>
+               
+              </div>
+              <div class="card-body ">
+                <canvas id="chartEmail1" class="ct-chart ct-perfect-fourth" width="456" height="300"></canvas>
+              </div>
+              <div class="card-footer ">
+              <div class="legend">
+                            <i class="fa fa-circle text-info" ></i>
+                            Positive
+                          </div>
+                          <div class="legend">
+                            <i class="fa fa-circle text-warning" ></i>
+                            Slightly Positive
+                          </div>
+                          <div class="legend">
+                            <i class="fa fa-circle text-danger"></i>
+                            Negative
+                          </div>
+                          <div class="legend">
+                            <i class="fa fa-circle text-success "></i>
+                            Slightly Negative
+                          </div>
+                          <div class="legend">
+                            <i class="fa fa-circle text-dark"></i>
+                            Neutral
+                          </div>
+                              </div> 
+           </div>
+           </div>
+
+       </div>
+
+        <div class="row">
+             <div class="col-md-12 ">
+            <div class="card ">
+              <div class="card-header ">
+                <h4 class="card-title">How to use SentiENT ?</h4>
+                <p class="text-dark" style="font-size:16px;">Step 1: Search for the product you are looking for at the top left corner.<br>Step 2: A list of the searched product appears in their trending order. on it's right, percentage of positive reviews appears.<br>Step 3: You can click on the link of a particular product from the list to get it's detailed analysis. In order to make it easy to understand there's a pie-chart having different categories.</p>
+              </div>
+              <div class="card-body ">
+                
+              </div>
+              <div class="card-footer ">
+              </div>
+           </div>
+           </div>
+
+             
+
+       </div>
+      </div>
+
+      <footer class="footer footer-black  footer-white ">
+        <div class="container-fluid">
+          <div class="row">
+            <nav class="footer-nav">
+              <ul>
+                <li>
+                  <a href="#">Home</a>
+                </li>
+              </ul>
+            </nav>
+            <div class="credits ml-auto">
+              <span class="copyright">
+                ©
+                <script>
+                  document.write(new Date().getFullYear())
+                </script>, Made with <i class="fa fa-heart heart"></i> by __init__
+              </span>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+  <!--   Core JS Files   -->
+  <script src="/assets/js/core/jquery.min.js"></script>
+  <script src="/assets/js/core/popper.min.js"></script>
+  <script src="/assets/js/core/bootstrap.min.js"></script>
+  <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <script src="/assets/js/plugins/moment.min.js"></script>
+  <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
+  <script src="/assets/js/plugins/bootstrap-switch.js"></script>
+  <!--  Plugin for Sweet Alert -->
+  <script src="/assets/js/plugins/sweetalert2.min.js"></script>
+  <!-- Forms Validations Plugin -->
+  <script src="/assets/js/plugins/jquery.validate.min.js"></script>
+  <!--  Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
+  <script src="/assets/js/plugins/jquery.bootstrap-wizard.js"></script>
+  <!--	Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
+  <script src="/assets/js/plugins/bootstrap-selectpicker.js"></script>
+  <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
+  <script src="/assets/js/plugins/bootstrap-datetimepicker.js"></script>
+  <!--  DataTables.net Plugin, full documentation here: https://datatables.net/    -->
+  <script src="/assets/js/plugins/jquery.dataTables.min.js"></script>
+  <!--	Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
+  <script src="/assets/js/plugins/bootstrap-tagsinput.js"></script>
+  <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
+  <script src="/assets/js/plugins/jasny-bootstrap.min.js"></script>
+  <!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
+  <script src="/assets/js/plugins/fullcalendar.min.js"></script>
+  <!-- Vector Map plugin, full documentation here: http://jvectormap.com/documentation/ -->
+  <script src="/assets/js/plugins/jquery-jvectormap.js"></script>
+  <!--  Plugin for the Bootstrap Table -->
+  <script src="/assets/js/plugins/nouislider.min.js"></script>
+  <!--  Google Maps Plugin    -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2Yno10-YTnLjjn_Vtk0V8cdcY5lC4plU"></script>
+  <!-- Place this tag in your head or just before your close body tag. -->
+  <script async defer src="http://buttons.github.io/buttons.js"></script>
+  <!-- Chart JS -->
+  <script src="/assets/js/plugins/chartjs.min.js"></script>
+  <!--  Notifications Plugin    -->
+  <script src="/assets/js/plugins/bootstrap-notify.js"></script>
+  <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="/assets/js/paper-dashboard.min790f.js?v=2.0.1" type="text/javascript"></script>
+  <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
+  <script src="/assets/demo/demo.js"></script>
+  <!-- Sharrre libray -->
+  <script src="/assets/demo/jquery.sharrre.js"></script>
+  <script>
+    $(document).ready(function() {
+      ctx = document.getElementById('chartEmail').getContext("2d");
+
+      myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['Positive','Slightly Positive','Negative','Slightly Negative','Neutral'],
+          datasets: [{
+            label: "Reviews",
+            pointRadius: 0,
+            pointHoverRadius: 0,
+            backgroundColor: [
+              ' #17a2b8',
+              '#ffc107',
+              '#dc3545',
+              '#28a745',
+              '#343a40'
+            ],
+            borderWidth: 0,
+            data: [{{ positive }}, {{ slightly_positive }}, {{ negative }}, {{ slightly_negative }}, {{ neutral }}]
+          }]
+        },
+        options: {
+
+          legend: {
+
+            display: false
+          },
+
+          tooltips: {
+            enabled: true
+          },
+
+          scales: {
+            yAxes: [{
+
+              ticks: {
+                display: false
+              },
+              gridLines: {
+                drawBorder: false,
+                zeroLineColor: "transparent",
+                color: 'rgba(255,255,255,0.05)'
+              }
+
+            }],
+
+            xAxes: [{
+              barPercentage: 1.6,
+              gridLines: {
+                drawBorder: false,
+                color: 'rgba(255,255,255,0.1)',
+                zeroLineColor: "transparent"
+              },
+              ticks: {
+                display: false,
+              }
+            }]
+          },
+        }
+      });
+    });
+
+    $(document).ready(function() {
+      ctx = document.getElementById('chartEmail1').getContext("2d");
+
+      myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['Positive','Slightly Positive','Negative','Slightly Negative','Neutral'],
+          datasets: [{
+            label: "Reviews",
+            pointRadius: 0,
+            pointHoverRadius: 0,
+            backgroundColor: [
+               ' #17a2b8',
+              '#ffc107',
+              '#dc3545',
+              '#28a745',
+              '#343a40'
+            ],
+            borderWidth: 0,
+            data: [40,10,20,13,17]
+          }]
+        },
+        options: {
+
+          legend: {
+
+            display: false
+          },
+
+          tooltips: {
+            enabled: true
+          },
+
+          scales: {
+            yAxes: [{
+
+              ticks: {
+                display: false
+              },
+              gridLines: {
+                drawBorder: false,
+                zeroLineColor: "transparent",
+                color: 'rgba(255,255,255,0.05)'
+              }
+
+            }],
+
+            xAxes: [{
+              barPercentage: 1.6,
+              gridLines: {
+                drawBorder: false,
+                color: 'rgba(255,255,255,0.1)',
+                zeroLineColor: "transparent"
+              },
+              ticks: {
+                display: false,
+              }
+            }]
+          },
+        }
+      });
+    });
+  </script>
+</body>
+
+
+</html>

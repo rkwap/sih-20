@@ -1,0 +1,56 @@
+{% extends 'layouts.html' %}
+
+{% block main %}
+<div class="col-md-12">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="card-title"> Search results for '{{query}}' </h4>
+    </div>
+    <div class="card-body">
+        <table class="table">
+          <thead class="">
+            <tr>
+              <th></th>
+              <th class="text-center">
+                Product
+              </th>
+              <th></th>
+              <th></th>
+              <th class="text-right">
+                Positive Reviews
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+                {% for i in range(p_id|length) %}
+                <tr>
+                  <td>
+                  </td>
+                  <td class="text-center">
+                    <a href="{{url_for('main.reviews',pid=p_id[i])}}">{{p_name[i]}}</a>
+                    <br>
+                    <small><a href="{{ p_url[i] }}">Product Link : </a><br><br></small>
+                  </td>
+                  <td>
+                  </td>
+                  <td>
+                  </td>
+                  <td class="text-right"> <b>
+                    {% if polarities[i]|count !=0%}
+                      {% if polarities[i]|sum / polarities[i]|count  >=0 %}
+                        {{ (polarities[i]|sum / polarities[i]|count)|round(1) *100}}% <br>
+                      {% else %}
+                        {{ (100 - polarities[i]|sum / polarities[i]|count) | round(1)*100}}%
+                      {% endif %}
+                    {% endif %}
+                  </b>
+                  </td>
+                </tr>
+                {% endfor %}
+          </tbody>
+        </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
