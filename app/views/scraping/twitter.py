@@ -1,12 +1,12 @@
 from app import *
 twitter = Blueprint('twitter', __name__,url_prefix='/scrape/twitter')
-
+from asyncio import new_event_loop, set_event_loop
 @twitter.route('/<string:q>/', methods=["GET","POST"])
 def twitter_search_url(q):
     data=[]
     tweets = scrape(q)
     for tweet in tweets:
-        t_id=tweet.id
+        t_id=str(tweet.id)
         check_comment=query_db("SELECT t_id from twitter WHERE t_id=%s", (t_id,))
         if len(check_comment)==0:
             text = str(tweet.tweet)
@@ -29,7 +29,7 @@ def scrape(search_string):
     tweets = []
     c = twint.Config()
     c.Search = search_string
-    c.Limit = 100
+    c.Limit = 10
     #c.Filter_retweets = True
     c.Store_object = True
     c.Store_object_tweets_list = tweets
