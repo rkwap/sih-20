@@ -1,9 +1,29 @@
-import twint
-from textblob import TextBlob
-from googletrans import Translator
-import psycopg2
-import json
-import emoji
+from app import *
+twitter = Blueprint('twitter', __name__,url_prefix='/scrape/twitter')
+
+@twitter.route('/<string:q>/', methods=["GET","POST"])
+def twitter_search_url(q):
+    data=[]
+    tweets = scrape(q)
+    for tweet in tweets:
+        t_id=tweet.id
+        check_comment=query_db("SELECT t_id from twitter WHERE t_id=%s", (t_id,))
+        if len(check_comment)==0:
+            text = str(tweet.tweet)
+            sentiment=getMixedSentiment(text)
+            polarity=str(sentiment.polarity)
+            subjectivity=str(sentiment.subjectivity)
+            execute_db("INSERT INTO twitter(t_id,tweet,polarity,subjectivity) VALUES (%s,%s,%s,%s)",(
+                        t_id,
+                        text,
+                        polarity,
+                        subjectivity,
+                    ))
+        data.append(query_db("SELECT * FROM twitter WHERE t_id=%s", (t_id,)))
+
+    print(data)
+    return render_template("index.html", **locals())
+
 
 def scrape(search_string):
     tweets = []
@@ -16,37 +36,3 @@ def scrape(search_string):
     c.Format = "id: {id}"
     twint.run.Search(c)
     return tweets
-
-def Translate(text):
-    translator = Translator()
-    new_text=translator.translate(text).text
-    blob = TextBlob(new_text)
-    val = []
-    val.append(blob)
-    val.append(float(blob.sentiment[0]))
-    val.append(float(blob.sentiment[1]))
-    return val #returns polarity and subjectivity
-
-def write(search):
-    try:
-        connect_str = "dbname='sih' user='badboy' host='localhost' password='1234'"
-        conn = psycopg2.connect(connect_str)
-        cursor = conn.cursor()
-        tweets = scrape(search)
-        for tweet in tweets:
-            string = tweet.tweet
-            string = emoji.get_emoji_regexp().sub(u'',string)
-            val = Translate(string)
-            #query = "insert into twitter values('"+str(tweet.id)+"','"+str(val[0])+"','"+str(val[1])+"','"+str(val[2])+"');"
-            query = "INSERT INTO twitter(t_id,tweet,polarity,subjectivity) VALUES (%s,%s,%s,%s)"
-            cursor.execute(query,(str(tweet.id),str(val[0]),str(val[1]),str(val[2])))
-            conn.commit()
-        cursor.close()
-        conn.close()
-    except Exception as e:
-        print("Error Connecting to Database")
-        print(e)
-
-if __name__=="__main__":
-    search = "CAA"
-    write(search)

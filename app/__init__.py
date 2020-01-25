@@ -12,6 +12,7 @@ import lxml.html
 import io
 import nltk
 import emoji
+import twint
 from datetime import date
 from flask_mail import Mail, Message
 from flask import Flask, request, render_template, flash, redirect, url_for, session, Blueprint,jsonify
@@ -60,6 +61,8 @@ def execute_db(query,args=()):
     cur.execute(query,args)
     con.commit()
     cur.close()
+
+
 def query_db(query,args=(),one=False):
     cur = con.cursor()
     result=cur.execute(query,args)
@@ -84,9 +87,9 @@ def query_db(query,args=(),one=False):
     
 # Importing Blueprints
 from app.views.main import main
-from app.views.scraping.flipkart import flipkart
+from app.views.scraping.twitter import twitter
 from app.views.scraping.youtube import youtube
 # Registering Blueprints
 app.register_blueprint(main)
-app.register_blueprint(flipkart)
+app.register_blueprint(twitter)
 app.register_blueprint(youtube)

@@ -26,10 +26,8 @@ def yt_search_url(yt_id):
                     ))
                     
         # retrieving data from db
-        data=query_db("SELECT * FROM youtube WHERE c_id=%s", (c_id,))
-
+        data.append(query_db("SELECT * FROM youtube WHERE c_id=%s", (c_id,)))
         count+=1
-
         if limit and count>=limit:
             break
 
