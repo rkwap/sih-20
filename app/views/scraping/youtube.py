@@ -30,7 +30,12 @@ def yt_search_url(yt_id):
         count+=1
         if limit and count>=limit:
             break
-
+    count=query_db("SELECT count(c_id) FROM youtube")
+    polarities=query_db("SELECT polarity FROM youtube")
+    total_polarities=[p for p in polarities]
+    total_polarity=0
+    for x in total_polarities:
+        total_polarity+=float(x[0])
     return render_template("index.html", **locals())
 
 
